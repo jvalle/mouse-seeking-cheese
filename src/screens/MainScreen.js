@@ -8,6 +8,8 @@
 
         init: function () {
 
+            this.counter = 0;
+
             this.map = new Ω.Map(this.sheet, [
                 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
                 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -58,6 +60,10 @@
         },
 
         tick: function () {
+            this.counter++;
+
+            if (!(this.counter % 25))
+                this.updateMap();
 
             this.player.tick(this.map);
         },
@@ -71,10 +77,9 @@
         },
 
         updateMap: function () {
-            console.log('we get here');
-            this.map.cells = this.map.cells.slice(0, 1);
 
-            this.map.cells.push([1, 1, 1, 1, 1, 1, 1, 1, 1, 1]);
+            this.map.cells.pop();
+            this.map.cells.unshift([1,0,0,0,0,0,0,0,0,1]);
         }
     });
 
