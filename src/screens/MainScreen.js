@@ -4,7 +4,7 @@
 
     var MainScreen = Ω.Screen.extend({
 
-        sheet: new Ω.SpriteSheet('res/tiles.png', 16, 16),
+        sheet: new Ω.SpriteSheet('res/tiles.png', 32, 32),
 
         init: function () {
             this.counter = 0;
@@ -30,7 +30,7 @@
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 [1, 0, 0, 1, 0, 1, 0, 1, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             ]);
 
             console.log(this.map);
@@ -47,7 +47,6 @@
                 this.updateMap();
                 this.player.move(0, 16, this.map);
             }
-
 
             this.player.tick(this.map);
         },

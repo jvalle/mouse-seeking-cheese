@@ -1,3 +1,8 @@
 body {
     background-color: #efefef;
 }
+
+main {
+	margin: 0 auto;
+	width: 320px;
+}

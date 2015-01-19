@@ -3,13 +3,15 @@
     "use strict";
 
     var Player = Ω.Entity.extend({
-        w: 10,
-        h: 10,
+        w: 25,
+        h: 25,
         speed: 2,
 
         mouse: new Ω.Image('res/mouse.svg', 2, 0.5),
 
         tick: function (map) {
+
+            console.log('mouse width', this.mouse.w);
 
             var x = 0,
                 y = 0;

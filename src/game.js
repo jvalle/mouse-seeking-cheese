@@ -4,7 +4,7 @@
 
     var MouseMaze = Ω.Game.extend({
 
-        canvas: "#board",
+        canvas: "#game",
 
         init: function (w, h) {
 
@@ -21,9 +21,7 @@
         },
 
         load: function () {
-
             this.setScreen(new TitleScreen());
-
         }
 
     });
