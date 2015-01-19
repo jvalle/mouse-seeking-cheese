@@ -12,13 +12,10 @@
 
             Ω.input.bind({
                 "space": "space",
-                "touch": "touch",
-                "escape": "escape",
                 "left": "left",
                 "right": "right",
                 "up": "up",
                 "down": "down",
-                "moused": "mouse1"
             });
 
         },

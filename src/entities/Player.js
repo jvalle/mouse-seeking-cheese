@@ -7,6 +7,8 @@
         h: 10,
         speed: 2,
 
+        mouse: new Ω.Image('res/mouse.svg', 2, 0.5),
+
         tick: function (map) {
 
             var x = 0,
@@ -36,10 +38,12 @@
         },
 
         render: function (gfx) {
-            var c = gfx.ctx;
+            // var c = gfx.ctx;
 
-            c.fillStyle = "#333";
-            c.fillRect(this.x, this.y, this.w, this.h);
+            // c.fillStyle = "#333";
+            // c.fillRect(this.x, this.y, this.w, this.h);
+
+            this.mouse.render(gfx, this.x, this.y);
         }
 
     });
