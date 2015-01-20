@@ -10,9 +10,6 @@
         mouse: new Ω.Image('res/mouse.svg', 2, 0.5),
 
         tick: function (map) {
-
-            console.log('mouse width', this.mouse.w);
-
             var x = 0,
                 y = 0;
 
@@ -40,12 +37,37 @@
         },
 
         render: function (gfx) {
-            // var c = gfx.ctx;
+            var c = gfx.ctx;
 
-            // c.fillStyle = "#333";
-            // c.fillRect(this.x, this.y, this.w, this.h);
+            console.log("THE LAST KEY!", Ω.input.lastKey);
 
-            this.mouse.render(gfx, this.x, this.y);
+            switch (Ω.input.lastKey) {
+                case 37:
+                    c.translate(c.width/2, c.height/2);
+                    c.rotate(-90 * Math.PI/180);
+                    this.mouse.render(gfx, -this.y - this.mouse.w, this.x);
+                    c.rotate(+90 * Math.PI/180);
+                    c.translate(-c.width/2, -c.height/2);
+                    break;
+                case 39:
+                    c.translate(c.width/2, c.height/2);
+                    c.rotate(90 * Math.PI/180);
+                    this.mouse.render(gfx, this.y, -this.x - this.mouse.w);
+                    c.rotate(-90 * Math.PI/180);
+                    c.translate(-c.width/2, -c.height/2);
+                    break;
+                case 40:
+                    c.translate(c.width/2, c.height/2);
+                    c.rotate(180 * Math.PI/180);
+                    console.log(this.x, this.y, this.mouse.h);
+                    this.mouse.render(gfx, -this.x - this.mouse.w, -this.y - this.mouse.h);
+                    c.rotate(-180 * Math.PI/180);
+                    c.translate(-c.width/2, -c.height/2);
+                    break;
+                default:
+                    this.mouse.render(gfx, this.x, this.y);
+            }
+
         }
 
     });
