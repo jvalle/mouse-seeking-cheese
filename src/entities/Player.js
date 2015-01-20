@@ -41,25 +41,32 @@
 
             console.log("THE LAST KEY!", Ω.input.lastKey);
 
+            // normalize the forward-ness
+            if (Ω.input.isDown("up") && !(Ω.input.isDown("left") || Ω.input.isDown("right")))
+                Ω.input.lastKey = 38;
+
+            // and i guess the backwards-ness, to be thorough
+            if (Ω.input.isDown("down") && !(Ω.input.isDown("left") || Ω.input.isDown("right")))
+                Ω.input.lastKey = 40;
+
             switch (Ω.input.lastKey) {
-                case 37:
+                case 37: // going left
                     c.translate(c.width/2, c.height/2);
                     c.rotate(-90 * Math.PI/180);
                     this.mouse.render(gfx, -this.y - this.mouse.w, this.x);
                     c.rotate(+90 * Math.PI/180);
                     c.translate(-c.width/2, -c.height/2);
                     break;
-                case 39:
+                case 39: // going right
                     c.translate(c.width/2, c.height/2);
                     c.rotate(90 * Math.PI/180);
                     this.mouse.render(gfx, this.y, -this.x - this.mouse.w);
                     c.rotate(-90 * Math.PI/180);
                     c.translate(-c.width/2, -c.height/2);
                     break;
-                case 40:
+                case 40: // going backwards...       why are you going backwards?
                     c.translate(c.width/2, c.height/2);
                     c.rotate(180 * Math.PI/180);
-                    console.log(this.x, this.y, this.mouse.h);
                     this.mouse.render(gfx, -this.x - this.mouse.w, -this.y - this.mouse.h);
                     c.rotate(-180 * Math.PI/180);
                     c.translate(-c.width/2, -c.height/2);
