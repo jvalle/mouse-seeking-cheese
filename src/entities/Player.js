@@ -3,7 +3,7 @@
     "use strict";
 
     var Player = Ω.Entity.extend({
-        w: 25,
+        w: 22,
         h: 25,
         speed: 2,
 
@@ -16,7 +16,7 @@
             var x = 0,
                 y = 0;
 
-            // check those collisions
+            // check those collisions for the map
             if (this.x >= map.w - this.w) {
                 x -= this.speed;
             } else if (this.x <= 0) {

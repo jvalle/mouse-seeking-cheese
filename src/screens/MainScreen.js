@@ -71,7 +71,7 @@
                 wallct = (difficulty.toString().length + Math.round(Math.random() * 3)) + 2;
 
 
-            if (this.s % 2) {
+            if (this.s++ % 2) {
                 row = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
             } else {
                 for (var i = 0; i < 10; i++) {
@@ -81,11 +81,12 @@
                         row.push(0);
                     }
                 }
+
+                row = this.shuffle(row);
             }
 
 
-            this.map.cells.unshift(this.shuffle(row));
-            this.s++;
+            this.map.cells.unshift(row);
         },
 
         shuffle: function (o) {
