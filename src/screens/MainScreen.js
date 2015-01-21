@@ -45,7 +45,7 @@
 
             if (!(this.counter % 25)) {
                 this.updateMap();
-                this.player.move(0, 16, this.map);
+                this.player.move(0, 32, this.map);
             }
 
             this.player.tick(this.map);
