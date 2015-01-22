@@ -53,7 +53,7 @@
         },
 
         render: function (gfx) {
-            this.clear(gfx, "hsl(5, 40%, 40%)");
+            this.clear(gfx, "#666666");
 
             this.map.render(gfx, this.camera);
             this.player.render(gfx);
