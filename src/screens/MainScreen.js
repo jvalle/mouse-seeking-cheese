@@ -33,20 +33,21 @@
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             ]);
 
-            console.log(this.map);
-
+            this.camera = new Ω.Camera(0, 0, Ω.env.w, Ω.env.h);
             this.player = new Player(75, Ω.env.h - 28);
 
-            console.log(this.player);
+            this.camera.y = this.player.y - (Ω.env.h - 130);
         },
 
         tick: function () {
             this.counter++;
 
-            if (!(this.counter % 25)) {
+            if (!(this.counter % 34)) {
                 this.updateMap();
                 this.player.move(0, 32, this.map);
             }
+
+            this.camera.y -= 1;
 
             this.player.tick(this.map);
         },
@@ -54,7 +55,7 @@
         render: function (gfx) {
             this.clear(gfx, "hsl(5, 40%, 40%)");
 
-            this.map.render(gfx);
+            this.map.render(gfx, this.camera);
             this.player.render(gfx);
         },
 
@@ -70,7 +71,6 @@
             var row = [],
                 wallct = (difficulty.toString().length + Math.round(Math.random() * 3)) + 2;
 
-
             if (this.s++ % 2) {
                 row = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
             } else {
@@ -85,7 +85,7 @@
                 row = this.shuffle(row);
             }
 
-
+            this.camera.moveBy(0, 32);
             this.map.cells.unshift(row);
         },
 
