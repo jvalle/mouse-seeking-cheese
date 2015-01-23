@@ -5,6 +5,7 @@
     var MainScreen = Ω.Screen.extend({
 
         sheet: new Ω.SpriteSheet('res/tiles.png', 32, 32),
+        font: new Ω.Font("res/mamefont.png", 16, 16, "abcdefghijklmnopqrstuvwxyz0123456789~.,:!?'\"&<>"),
 
         init: function () {
             this.counter = 0;
@@ -35,28 +36,76 @@
 
             this.camera = new Ω.Camera(0, 0, Ω.env.w, Ω.env.h);
             this.player = new Player(75, Ω.env.h - 28);
+            this.state = new Ω.utils.State('PREGAME');
 
             this.camera.y = this.player.y - (Ω.env.h - 130);
         },
 
         tick: function () {
             this.counter++;
+            this.state.tick();
 
-            if (!(this.counter % 34)) {
-                this.updateMap();
-                this.player.move(0, 32, this.map);
+            switch (this.state.get()) {
+                case 'PREGAME':
+                    // game.setDialog(new Ω.Dialog());
+                    if (this.state.count > 30 &&
+                        Ω.input.isDown("left") ||
+                        Ω.input.isDown("right") ||
+                        Ω.input.isDown("up") ||
+                        Ω.input.isDown("down") ) {
+                        this.state.set('PARTY');
+                    }
+                    break;
+                case 'PARTY':
+                    // maybe break this out into its own tick.party function
+                    if (!(this.counter % 34)) {
+                        this.updateMap();
+                        this.player.move(0, 32, this.map);
+                    }
+
+                    this.camera.y -= 1;
+
+                    this.player.tick(this.map);
+                    break;
+                case 'COPS':
+                    if (this.state.first()) {
+                        this.shake = new Ω.Shake(30);
+                    }
+                    if (this.state.count > 20) {
+                        this.state.set('BUSTED');
+                    }
+                    break;
+                case 'BUSTED':
+                    // save / display score
+                    // restart game
             }
 
-            this.camera.y -= 1;
 
-            this.player.tick(this.map);
         },
 
         render: function (gfx) {
             this.clear(gfx, "#666666");
 
-            this.map.render(gfx, this.camera);
-            this.player.render(gfx);
+            switch (this.state.get()) {
+                case 'PREGAME':
+                    this.map.render(gfx, this.camera);
+                    this.player.render(gfx);
+                    this.font.render(gfx, "use", 10, 50);
+                    this.font.render(gfx, "arrow", 10, this.font.h);
+                    this.font.render(gfx, "keys", 10, 2 * this.font.h);
+                    this.font.render(gfx, "to", 10, 3 * this.font.h);
+                    this.font.render(gfx, "move", 10, 4 * this.font.h);
+                    break;
+                case 'PARTY':
+                    this.map.render(gfx, this.camera);
+                    this.player.render(gfx);
+                    break;
+                case 'COPS':
+                    this.font.render(gfx, "YOU DIED", 10, 50);
+                case 'BUSTED':
+                    // end game stuff
+            }
+
         },
 
         updateMap: function () {

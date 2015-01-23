@@ -20,8 +20,6 @@
             var c = gfx.ctx;
             c.font = "48px serif";
 
-            console.log(c);
-
             this.clear(gfx, "#ff6600");
 
             this.font.render(gfx, "mouse", 10, 50);
