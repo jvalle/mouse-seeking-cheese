@@ -5,7 +5,7 @@
     var Player = Ω.Entity.extend({
         w: 22,
         h: 25,
-        speed: 3,
+        speed: 2.5,
 
         mouse: new Ω.Image('res/mouse.svg', 2, 0.5),
 
