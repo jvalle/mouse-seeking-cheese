@@ -156,7 +156,7 @@
         },
 
         updateFrequency: function () {
-            this.rowFreq = Math.floor(this.sheet.h / this.scrollY);
+            this.rowFreq = Math.round(this.sheet.h / this.scrollY);
         }
     });
 
