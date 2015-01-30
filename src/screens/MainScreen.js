@@ -47,7 +47,6 @@
 
             switch (this.state.get()) {
                 case 'PREGAME':
-                    // game.setDialog(new Ω.Dialog());
                     if (this.state.count > 30 &&
                         Ω.input.isDown("left") ||
                         Ω.input.isDown("right") ||
@@ -58,7 +57,7 @@
                     break;
                 case 'PARTY':
                     // maybe break this out into its own tick.party function
-                    if (!(this.counter % 34)) {
+                    if (!(this.counter % 32)) {
                         this.updateMap();
                         this.player.move(0, 32, this.map);
                     }
