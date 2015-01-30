@@ -39,8 +39,6 @@
         render: function (gfx) {
             var c = gfx.ctx;
 
-            console.log("THE LAST KEY!", Ω.input.lastKey);
-
             // normalize the forward-ness
             if (Ω.input.isDown("up") && !(Ω.input.isDown("left") || Ω.input.isDown("right")))
                 Ω.input.lastKey = 38;

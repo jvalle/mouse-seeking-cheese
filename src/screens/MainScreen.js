@@ -6,10 +6,14 @@
 
         sheet: new Ω.SpriteSheet('res/tiles.png', 32, 32),
         font: new Ω.Font("res/mamefont.png", 16, 16, "abcdefghijklmnopqrstuvwxyz0123456789~.,:!?'\"&<>"),
+        scrollY: 1,
+        rowFreq: 32,
 
         init: function () {
             this.counter = 0;
             this.s = 0;
+
+            console.log(this.sheet);
 
             this.map = new Ω.Map(this.sheet, [
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -57,12 +61,16 @@
                     break;
                 case 'PARTY':
                     // maybe break this out into its own tick.party function
-                    if (!(this.counter % 32)) {
+                    if (!(this.counter % 120)) {
+                        this.updateSpeed();
+                    }
+
+                    if (!(this.counter % this.rowFreq)) {
                         this.updateMap();
                         this.player.move(0, 32, this.map);
                     }
 
-                    this.camera.y -= 1;
+                    this.camera.y -= this.scrollY;
 
                     this.player.tick(this.map);
                     break;
@@ -140,6 +148,15 @@
         shuffle: function (o) {
             for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
             return o;
+        },
+
+        updateSpeed: function () {
+            this.scrollY += 0.02
+            this.updateFrequency();
+        },
+
+        updateFrequency: function () {
+            this.rowFreq = Math.floor(this.sheet.h / this.scrollY);
         }
     });
 
