@@ -14,6 +14,10 @@
                 y = 0;
 
             // check those collisions for the map
+            if (this.y < 32) {
+                y += this.speed;
+            }
+
             if (this.x >= map.w - this.w) {
                 x -= this.speed;
             } else if (this.x <= 0) {
