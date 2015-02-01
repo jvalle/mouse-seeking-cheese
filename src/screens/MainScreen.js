@@ -15,9 +15,9 @@
 
             this.map = new Ω.Map(this.sheet, [
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [1, 0, 1, 1, 1, 1, 1, 1, 0, 0],
+                [1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [1, 0, 1, 1, 1, 1, 1, 1, 0, 0],
+                [1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 [1, 0, 1, 0, 0, 1, 1, 1, 1, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -38,6 +38,7 @@
 
             this.camera = new Ω.Camera(0, 0, Ω.env.w, Ω.env.h);
             this.player = new Player(75, Ω.env.h - 38);
+            this.cat = new Cat(0, Ω.env.h - 50);
             this.state = new Ω.utils.State('PREGAME');
 
             this.camera.y = 0;
@@ -92,6 +93,7 @@
                 case 'PARTY':
                     this.map.render(gfx, this.camera);
                     this.player.render(gfx);
+                    this.cat.render(gfx);
                     break;
                 case 'COPS':
                     this.font.render(gfx, "YOU DIED", 10, 50);
@@ -108,6 +110,10 @@
             if (!(this.counter % this.rowFreq)) {
                 this.updateMap();
                 this.player.move(0, 32, this.map);
+            }
+
+            if (this.state.count > 500) {
+                this.cat.tick(this.map);
             }
 
             console.log('the state counter: ' + this.state.count);

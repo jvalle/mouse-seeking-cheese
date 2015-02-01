@@ -25,8 +25,9 @@
             this.font.render(gfx, "mouse", 10, 50);
             this.font.render(gfx, "seeking", 10, 50 + this.font.h);
             this.font.render(gfx, "cheese", 10, 50 + 2 * this.font.h);
-            this.cheese.render(gfx, (Ω.env.w / 2) - (this.cheese.w / 2), 125 + (this.font.h * 3));
-            c.fillText("press [space] to begin", 0, 0);
+            this.cheese.render(gfx, (Ω.env.w / 2) - (this.cheese.w / 2), 100 + (this.font.h * 3));
+            this.font.render(gfx, "press space", 70, 400);
+            this.font.render(gfx, "to begin", 90, 400 + 2 * this.font.h);
         }
     });
 
