@@ -6,13 +6,84 @@
 
         sheet: new Ω.SpriteSheet('res/tiles.png', 32, 32),
         font: new Ω.Font("res/mamefont.png", 16, 16, "abcdefghijklmnopqrstuvwxyz0123456789~.,:!?'\"&<>"),
-        scrollY: 1,
-        rowFreq: 31,
         dead: new Ω.Sound('res/dead.mp3'),
 
         init: function () {
+            this.reset();
+        },
+
+        tick: function () {
+            this.counter++;
+            this.state.tick();
+
+            switch (this.state.get()) {
+                case 'PREGAME':
+                    if (this.state.count > 30 &&
+                        Ω.input.isDown("left") ||
+                        Ω.input.isDown("right") ||
+                        Ω.input.isDown("up") ||
+                        Ω.input.isDown("down") ) {
+                        this.state.set('PARTY');
+                    }
+                    break;
+                case 'PARTY':
+
+                    this.tickParty();
+
+                    break;
+                case 'COPS':
+                    if (this.state.count > 100) {
+                        this.state.set('BUSTED');
+                    }
+                    break;
+                case 'BUSTED':
+                    // save / display score
+                    // restart game
+                    if (this.state.count > 50 && Ω.input.isDown("space")) {
+                        this.reset();
+                        this.state.set('PREGAME');
+                    }
+            }
+        },
+
+        render: function (gfx) {
+            this.clear(gfx, "#666666");
+
+            switch (this.state.get()) {
+                case 'PREGAME':
+                    this.map.render(gfx, this.camera);
+                    this.player.render(gfx);
+                    this.font.render(gfx, "use", 10, 256);
+                    this.font.render(gfx, "arrow", 45, 256 + this.font.h);
+                    this.font.render(gfx, "keys", 55, 322);
+                    this.font.render(gfx, "to", 70, 322 + this.font.h);
+                    this.font.render(gfx, "move", 85, 385);
+                    break;
+                case 'PARTY':
+                    this.map.render(gfx, this.camera);
+                    this.player.render(gfx);
+                    if (this.state.count > 500) {
+                        this.cat.render(gfx);
+                    }
+                    break;
+                case 'COPS':
+                    this.map.render(gfx, this.camera);
+                    this.font.render(gfx, "you died!!", 85, (Ω.env.h / 2) - (this.font.h / 2));
+                case 'BUSTED':
+                    // end game stuff
+                    this.font.render(gfx, "game over", 10, 256);
+                    this.font.render(gfx, "your score was", 45, 256 + this.font.h);
+                    this.font.render(gfx, "xxxxx", 55, 322);
+                    this.font.render(gfx, "press space", 70, 400);
+                    this.font.render(gfx, "to play again", 90, 400 + 2 * this.font.h);
+            }
+        },
+
+        reset: function () {
             this.counter = 0;
             this.s = 0;
+            this.scrollY = 1;
+            this.rowFreq = 31;
 
             this.map = new Ω.Map(this.sheet, [
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -43,66 +114,6 @@
             this.state = new Ω.utils.State('PREGAME');
 
             this.camera.y = 0;
-        },
-
-        tick: function () {
-            this.counter++;
-            this.state.tick();
-
-            switch (this.state.get()) {
-                case 'PREGAME':
-                    if (this.state.count > 30 &&
-                        Ω.input.isDown("left") ||
-                        Ω.input.isDown("right") ||
-                        Ω.input.isDown("up") ||
-                        Ω.input.isDown("down") ) {
-                        this.state.set('PARTY');
-                    }
-                    break;
-                case 'PARTY':
-
-                    this.tickParty();
-
-                    break;
-                case 'COPS':
-                    if (this.state.first()) {
-                        this.shake = new Ω.Shake(30);
-                    }
-                    if (this.state.count > 100) {
-                        this.state.set('BUSTED');
-                    }
-                    break;
-                case 'BUSTED':
-                    // save / display score
-                    // restart game
-            }
-        },
-
-        render: function (gfx) {
-            this.clear(gfx, "#666666");
-
-            switch (this.state.get()) {
-                case 'PREGAME':
-                    this.map.render(gfx, this.camera);
-                    this.player.render(gfx);
-                    this.font.render(gfx, "use", 10, 256);
-                    this.font.render(gfx, "arrow", 45, 256 + this.font.h);
-                    this.font.render(gfx, "keys", 55, 322);
-                    this.font.render(gfx, "to", 70, 322 + this.font.h);
-                    this.font.render(gfx, "move", 85, 385);
-                    break;
-                case 'PARTY':
-                    this.map.render(gfx, this.camera);
-                    this.player.render(gfx);
-                    if (this.state.count > 500) {
-                        this.cat.render(gfx);
-                    }
-                    break;
-                case 'COPS':
-                    this.font.render(gfx, "YOU DIED", 10, 50);
-                case 'BUSTED':
-                    // end game stuff
-            }
         },
 
         tickParty: function () {
