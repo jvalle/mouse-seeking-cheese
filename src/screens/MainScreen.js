@@ -42,7 +42,7 @@
             this.player = new Player(75, Ω.env.h - 28);
             this.state = new Ω.utils.State('PREGAME');
 
-            this.camera.y = this.player.y - (Ω.env.h - 130);
+            this.camera.y = 0;
         },
 
         tick: function () {
@@ -95,13 +95,14 @@
 
             switch (this.state.get()) {
                 case 'PREGAME':
+                    console.log(50 + (Ω.env.h / 2) - 3 * this.font.h);
                     this.map.render(gfx, this.camera);
                     this.player.render(gfx);
-                    this.font.render(gfx, "use", 10, 50);
-                    this.font.render(gfx, "arrow", 10, this.font.h);
-                    this.font.render(gfx, "keys", 10, 2 * this.font.h);
-                    this.font.render(gfx, "to", 10, 3 * this.font.h);
-                    this.font.render(gfx, "move", 10, 4 * this.font.h);
+                    this.font.render(gfx, "use", 10, 258);
+                    this.font.render(gfx, "arrow", 45, 258 + this.font.h);
+                    this.font.render(gfx, "keys", 55, 322);
+                    this.font.render(gfx, "to", 70, 322 + this.font.h);
+                    this.font.render(gfx, "move", 85, 385);
                     break;
                 case 'PARTY':
                     this.map.render(gfx, this.camera);
@@ -112,7 +113,6 @@
                 case 'BUSTED':
                     // end game stuff
             }
-
         },
 
         updateMap: function () {
@@ -151,12 +151,12 @@
         },
 
         updateSpeed: function () {
-            this.scrollY += 0.02
+            this.scrollY += 0.02;
             this.updateFrequency();
         },
 
         updateFrequency: function () {
-            this.rowFreq = Math.round(this.sheet.h / this.scrollY);
+            this.rowFreq = Math.ceil(32 / this.scrollY);
         }
     });
 

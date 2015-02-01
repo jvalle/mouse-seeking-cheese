@@ -10,6 +10,8 @@
 
             this._super(w, h);
 
+            this.fps = false;
+
             Ω.input.bind({
                 "space": "space",
                 "left": "left",
