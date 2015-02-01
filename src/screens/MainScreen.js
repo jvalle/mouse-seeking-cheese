@@ -8,6 +8,7 @@
         font: new Ω.Font("res/mamefont.png", 16, 16, "abcdefghijklmnopqrstuvwxyz0123456789~.,:!?'\"&<>"),
         scrollY: 1,
         rowFreq: 31,
+        dead: new Ω.Sound('res/dead.mp3'),
 
         init: function () {
             this.counter = 0;
@@ -38,7 +39,7 @@
 
             this.camera = new Ω.Camera(0, 0, Ω.env.w, Ω.env.h);
             this.player = new Player(75, Ω.env.h - 38);
-            this.cat = new Cat(0, Ω.env.h - 50);
+            this.cat = new Cat(0, Ω.env.h);
             this.state = new Ω.utils.State('PREGAME');
 
             this.camera.y = 0;
@@ -67,7 +68,7 @@
                     if (this.state.first()) {
                         this.shake = new Ω.Shake(30);
                     }
-                    if (this.state.count > 20) {
+                    if (this.state.count > 100) {
                         this.state.set('BUSTED');
                     }
                     break;
@@ -93,7 +94,9 @@
                 case 'PARTY':
                     this.map.render(gfx, this.camera);
                     this.player.render(gfx);
-                    this.cat.render(gfx);
+                    if (this.state.count > 500) {
+                        this.cat.render(gfx);
+                    }
                     break;
                 case 'COPS':
                     this.font.render(gfx, "YOU DIED", 10, 50);
@@ -116,6 +119,10 @@
                 this.cat.tick(this.map);
             }
 
+            if (this.player.y >= this.cat.y) {
+                this.dead.play();
+                this.state.set('COPS');
+            }
             console.log('the state counter: ' + this.state.count);
 
             this.camera.y -= this.scrollY.toFixed(2);
@@ -158,7 +165,6 @@
 
             this.map.cells.unshift(row);
         },
-
         shuffle: function (o) {
             for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
             return o;
