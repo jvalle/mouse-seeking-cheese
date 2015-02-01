@@ -7,13 +7,11 @@
         sheet: new Ω.SpriteSheet('res/tiles.png', 32, 32),
         font: new Ω.Font("res/mamefont.png", 16, 16, "abcdefghijklmnopqrstuvwxyz0123456789~.,:!?'\"&<>"),
         scrollY: 1,
-        rowFreq: 32,
+        rowFreq: 31,
 
         init: function () {
             this.counter = 0;
             this.s = 0;
-
-            console.log(this.sheet);
 
             this.map = new Ω.Map(this.sheet, [
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -25,21 +23,21 @@
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 [1, 0, 0, 1, 0, 1, 0, 1, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [1, 1, 1, 1, 0, 0, 0, 0, 1, 0],
+                [1, 1, 1, 1, 0, 0, 0, 0, 1, 1],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [1, 0, 1, 1, 1, 1, 1, 1, 0, 0],
+                [1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 [1, 0, 1, 0, 1, 0, 1, 1, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [1, 0, 1, 0, 0, 1, 1, 1, 1, 0],
+                [1, 0, 1, 0, 0, 1, 1, 1, 1, 1],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [1, 0, 0, 1, 0, 1, 0, 1, 0, 0],
+                [1, 0, 0, 1, 0, 1, 0, 1, 0, 1],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             ]);
 
             this.camera = new Ω.Camera(0, 0, Ω.env.w, Ω.env.h);
-            this.player = new Player(75, Ω.env.h - 28);
+            this.player = new Player(75, Ω.env.h - 38);
             this.state = new Ω.utils.State('PREGAME');
 
             this.camera.y = 0;
@@ -60,19 +58,9 @@
                     }
                     break;
                 case 'PARTY':
-                    // maybe break this out into its own tick.party function
-                    if (!(this.counter % 120)) {
-                        this.updateSpeed();
-                    }
 
-                    if (!(this.counter % this.rowFreq)) {
-                        this.updateMap();
-                        this.player.move(0, 32, this.map);
-                    }
+                    this.tickParty();
 
-                    this.camera.y -= this.scrollY;
-
-                    this.player.tick(this.map);
                     break;
                 case 'COPS':
                     if (this.state.first()) {
@@ -86,8 +74,6 @@
                     // save / display score
                     // restart game
             }
-
-
         },
 
         render: function (gfx) {
@@ -95,11 +81,10 @@
 
             switch (this.state.get()) {
                 case 'PREGAME':
-                    console.log(50 + (Ω.env.h / 2) - 3 * this.font.h);
                     this.map.render(gfx, this.camera);
                     this.player.render(gfx);
-                    this.font.render(gfx, "use", 10, 258);
-                    this.font.render(gfx, "arrow", 45, 258 + this.font.h);
+                    this.font.render(gfx, "use", 10, 256);
+                    this.font.render(gfx, "arrow", 45, 256 + this.font.h);
                     this.font.render(gfx, "keys", 55, 322);
                     this.font.render(gfx, "to", 70, 322 + this.font.h);
                     this.font.render(gfx, "move", 85, 385);
@@ -115,9 +100,33 @@
             }
         },
 
+        tickParty: function () {
+            if (!(this.counter % 120)) {
+                this.updateSpeed();
+            }
+
+            if (!(this.counter % this.rowFreq)) {
+                this.updateMap();
+                this.player.move(0, 32, this.map);
+            }
+
+            console.log('the state counter: ' + this.state.count);
+
+            this.camera.y -= this.scrollY.toFixed(2);
+
+            this.player.tick(this.map);
+        },
+
+        updateSpeed: function () {
+            this.scrollY += 0.02;
+            this.rowFreq = Math.round(31 / this.scrollY);
+            console.log('scroll speed: ' + this.scrollY.toFixed(2) + ', rowFreq: ' + this.rowFreq);
+        },
+
         updateMap: function () {
             this.map.cells.pop();
             this.addRow(this.counter);
+            this.camera.moveBy(0, 32);
         },
 
         addRow: function (difficulty) {
@@ -141,22 +150,12 @@
                 row = this.shuffle(row);
             }
 
-            this.camera.moveBy(0, 32);
             this.map.cells.unshift(row);
         },
 
         shuffle: function (o) {
             for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
             return o;
-        },
-
-        updateSpeed: function () {
-            this.scrollY += 0.02;
-            this.updateFrequency();
-        },
-
-        updateFrequency: function () {
-            this.rowFreq = Math.ceil(32 / this.scrollY);
         }
     });
 
