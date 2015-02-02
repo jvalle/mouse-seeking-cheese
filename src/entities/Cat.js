@@ -6,6 +6,7 @@
         w: 320,
         h: 222,
         catCounter: 0,
+
         meow: new Ω.Sound('res/cat.wav'),
 
         bend: new Ω.Image('res/bend.png'),

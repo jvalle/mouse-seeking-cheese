@@ -69,11 +69,12 @@
                 case 'COPS':
                     this.map.render(gfx, this.camera);
                     this.font.render(gfx, "you died!!", 85, (Ω.env.h / 2) - (this.font.h / 2));
+                    break;
                 case 'BUSTED':
                     // end game stuff
                     this.font.render(gfx, "game over", 10, 256);
-                    this.font.render(gfx, "your score was", 45, 256 + this.font.h);
-                    this.font.render(gfx, "xxxxx", 55, 322);
+                    this.font.render(gfx, "your score was", 45, 256 + 2 * this.font.h);
+                    this.font.render(gfx, this.finalScore, 100, 322);
                     this.font.render(gfx, "press space", 70, 400);
                     this.font.render(gfx, "to play again", 90, 400 + 2 * this.font.h);
             }
@@ -81,9 +82,11 @@
 
         reset: function () {
             this.counter = 0;
-            this.s = 0;
+            this.s       = 0;
             this.scrollY = 1;
             this.rowFreq = 31;
+            this.score   = 0;
+            this.bonus   = 0;
 
             this.map = new Ω.Map(this.sheet, [
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -132,9 +135,11 @@
 
             if (this.player.y >= this.cat.y) {
                 this.dead.play();
+                this.finalScore = this.score;
                 this.state.set('COPS');
             }
-            console.log('the state counter: ' + this.state.count);
+
+            this.score = this.state.count + this.bonus;
 
             this.camera.y -= this.scrollY.toFixed(2);
 
