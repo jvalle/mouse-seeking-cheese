@@ -9,7 +9,9 @@
 
         meow: new Ω.Sound('res/cat.wav'),
 
-        bend: new Ω.Image('res/bend.png'),
+        bendR: new Ω.Image('res/bend.png'),
+
+        bendL: new Ω.Image('res/bend.png', 1),
 
         tick: function (map) {
             var x = 0,
@@ -28,8 +30,12 @@
             this.catCounter++;
         },
 
-        render: function (gfx) {
-            this.bend.render(gfx, this.x, this.y);
+        render: function (gfx, flip) {
+            if (flip) {
+                this.bendL.render(gfx, this.x, this.y);
+            } else {
+                this.bendR.render(gfx, this.x, this.y);
+            }
         },
 
     });

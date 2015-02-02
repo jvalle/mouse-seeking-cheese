@@ -63,7 +63,11 @@
                     this.map.render(gfx, this.camera);
                     this.player.render(gfx);
                     if (this.state.count > 500) {
-                        this.cat.render(gfx);
+                        if (this.player.x < Ω.env.w / 2) {
+                            this.cat.render(gfx, 1);
+                        } else {
+                            this.cat.render(gfx);
+                        }
                     }
                     break;
                 case 'COPS':
@@ -149,7 +153,6 @@
         updateSpeed: function () {
             this.scrollY += 0.02;
             this.rowFreq = Math.round(31 / this.scrollY);
-            console.log('scroll speed: ' + this.scrollY.toFixed(2) + ', rowFreq: ' + this.rowFreq);
         },
 
         updateMap: function () {
