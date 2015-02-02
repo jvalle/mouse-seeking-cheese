@@ -14,6 +14,8 @@
                 y = 0;
 
             // check those collisions for the map
+
+            // this is so terribly ugly
             if (this.y < 10) {
                 y += this.speed;
             }
